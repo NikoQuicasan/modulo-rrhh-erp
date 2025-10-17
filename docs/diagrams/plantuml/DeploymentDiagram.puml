@@ -1,0 +1,22 @@
+@startuml DeploymentDiagram
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+node "Servidor Cloud (AWS/Azure)" {
+    node "Docker Host" {
+        database "PostgreSQL Server" as DB {
+            component "HR_Database"
+        }
+        node "Kubernetes Cluster" {
+            pod "API Gateway Pod" {
+                component "Spring Boot App" as API
+            }
+            pod "SPA Pod" {
+                component "Nginx Server" as WebServer
+            }
+        }
+    }
+}
+WebBrowser -down-> WebServer: "HTTPS"
+WebServer -right-> API: "HTTPS"
+API -down-> DB: "JDBC"
+@enduml
